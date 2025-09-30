@@ -1,26 +1,129 @@
 @import "tailwindcss";
 
-:root {
-  --background: #ffffff;
-  --foreground: #171717;
+/* @custom-variant dark (&:is(.dark *)); */
+@plugin "tailwindcss-animate";
+@plugin "@tailwindcss/typography";
+
+@theme{
+    --color-primary: #cdb4db;
+    --color-secondary: #ffd500;
+    --color-accent: #10b981;
 }
 
-@theme inline {
-  --color-background: var(--background);
-  --color-foreground: var(--foreground);
-  --font-sans: var(--font-geist-sans);
-  --font-mono: var(--font-geist-mono);
+@layer utilities{
+    .heading{
+        @apply uppercase bg-black px-6 py-3 font-extrabold text-white 
+            sm:text-[54px] sm:leading-[64px] text-[36px] leading-[46px] max-w-5xl 
+            text-center my-5
+    }
+    .pink_container{
+        @apply bg-primary w-full h-[500px] flex flex-col justify-center items-center
+    }
+    .sub-heading{
+        @apply text-center text-lg font-semibold text-shadow-blue-950 text-white mt-3
+    }
+    .search-form{
+        @apply mt-6 flex w-full h-[80px] px-6 max-w-2xl rounded-4xl border border-black border-3 
+            bg-white shadow-md overflow-hidden
+    }
+    .search-input{
+        @apply flex-grow h-full text-2xl font-medium outline-none border-none
+    }
+    .search-btn{
+        @apply bg-black text-white  rounded-[50%] h-[40px] w-[40px] flex justify-center items-center
+    }
+    .text-30-semibold{
+        @apply text-3xl font-semibold
+    }
+    .text-30-bold{
+        @apply text-3xl font-bold
+    }
+    .text-16-medium{
+        @apply text-base font-medium
+    }
+    .text-26-semibold{
+        @apply text-3xl font-semibold
+    }
+    .card_grid{
+        @apply grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6
+    }
+    .no-results{
+        @apply text-center text-xl font-medium col-span-full
+    }
+    .startup-card{
+        @apply flex flex-col bg-white rounded-lg shadow-md overflow-hidden hover:shadow-xl transition-shadow duration-300
+    }
+    .group{
+        @apply relative
+    }
+    .flex-between{
+        @apply flex justify-between items-center
+    }
+    .startup_card_date{
+        @apply text-sm text-gray-500
+    }
+    .startup-card_description{
+        @apply text-black
+    }
+    .tag {
+        @apply bg-secondary px-6 py-3 font-bold rounded-sm uppercase relative before:content-[''] before:absolute before:top-2 before:left-2 before:border-t-[10px] before:border-t-black before:border-r-[10px] before:border-r-transparent after:content-[''] after:absolute after:bottom-2 after:right-2 after:border-b-[10px] after:border-b-black after:border-l-[10px] after:border-l-transparent ;
+    }
+     .category-tag {
+        @apply font-medium text-[16px]  px-4 py-2 rounded-full;
+    }
+    .no-result {
+        @apply text-slate-800 text-sm font-normal;
+    }
+    .view-container {
+        @apply flex justify-end items-center mt-5 fixed bottom-3 right-3;
+    }
+
+    .view-text {
+        @apply font-medium text-[16px] bg-pink-200 px-4 py-2 rounded-lg capitalize;
+    }
+    .startup-form {
+        @apply max-w-2xl mx-auto bg-white my-10 space-y-8 px-6;
+    }
+
+    .startup-form_label {
+        @apply font-bold text-[18px] text-black uppercase;
+    }
+    .startup-form_input {
+        @apply block border-[2px] border-black px-5 py-2 text-[18px] text-black font-semibold rounded-full mt-3 placeholder:text-slate-300 w-full;
+    }
+    .startup-form_textarea {
+        @apply border-[2px] border-black p-5 text-[18px] text-black font-semibold rounded-[20px] mt-3 placeholder:text-slate-300 ;
+    }
+
+    .startup-form_error {
+        @apply text-red-500 mt-2 ml-5;
+    }
+
+    .startup-form_editor {
+        @apply mt-3 border-[3px] border-black text-[18px] text-black font-semibold placeholder:text-slate-300 ;
+    }
+
+    .startup-form_btn {
+        @apply bg-primary border-[3px] border-black rounded-full p-5 min-h-[70px] w-full font-bold text-[18px] ;
+    }
+    .profile_container {
+        @apply w-full pb-10 pt-20 px-6 max-w-7xl mx-auto lg:flex-row flex-col flex gap-10;
+    }
+
+    .profile_card {
+        @apply w-80 px-6 pb-6 pt-20 flex flex-col justify-center items-center bg-primary border-[5px] border-black shadow-black rounded-[30px] relative z-0 h-fit max-lg:w-full shadow-lg;
+    }
+
+    .profile_title {
+        @apply w-11/12 bg-white border-[5px] border-black rounded-[20px] px-5 py-3 absolute -top-9 after:absolute after:content-[''] after:-top-1 after:right-0 after:-skew-y-6 after:bg-black after:-z-[1] after:rounded-[20px] after:w-full after:h-[60px] before:absolute before:content-[''] before:-bottom-1 before:left-0  before:-skew-y-6 before:w-full before:h-[60px] before:bg-black  before:-z-[1] before:rounded-[20px] shadow-2xl;
+    }
+
+    .profile_image {
+        @apply rounded-full object-cover border-[3px] border-black;
+    }
+    .no-result {
+        @apply text-slate-800 text-sm font-normal;
+    }
+
 }
 
-@media (prefers-color-scheme: dark) {
-  :root {
-    --background: #0a0a0a;
-    --foreground: #ededed;
-  }
-}
-
-body {
-  background: var(--background);
-  color: var(--foreground);
-  font-family: Arial, Helvetica, sans-serif;
-}

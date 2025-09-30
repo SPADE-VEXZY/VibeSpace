@@ -1,0 +1,81 @@
+import { formatDate } from "@/lib/utils"
+import { client } from "@/sanity/lib/client"
+import { PLAYLIST_BY_SLUG_QUERY, STARTUP_BY_ID_QUERY } from "@/sanity/lib/queries"
+import Image from "next/image"
+import Link from "next/link"
+import { notFound } from "next/navigation"
+import markdownit from "markdown-it"
+import { Suspense } from "react"
+import View from "@/app/ui/startup/View"
+import StartupCard, { StartupTypeCard } from "@/app/ui/root/StartupCard"
+
+const md = new markdownit()
+
+export const experimental_ppr = true
+
+const page = async ({ params }: { params: Promise<{ id: string }> }) => {
+
+    const id = (await params).id
+
+    const [post, {select: editorPosts}] = await Promise.all([
+        client.fetch(STARTUP_BY_ID_QUERY, { id }),
+        client.fetch(PLAYLIST_BY_SLUG_QUERY, {slug: "editor-picks-new"})
+    ])
+
+
+    if (!post) return notFound()
+
+    const parsedContent = md.render(post?.pitch || "")
+
+    return (
+        <>
+            <section className="pink_container !m-h-[230px]">
+                <p className="tag">{formatDate(post?._createdAt)}</p>
+                <h1 className="text-3xl heading">{post.title}</h1>
+                <p className="sub-heading !max-w-5xl">{post?.description}</p>
+            </section>
+            <section className="section_container w-11/12 max-w-[900px] mx-auto my-10">
+                <img src={post?.image} alt="thumbnail" className="w-full h-auto rounded-xl" />
+                <div className="mt-5">
+                    <div className="flex-between items-center gap-5 my-5">
+                        <Link href={`/user/${post?.author?._id}`} className="flex items-center gap-2 mb-3">
+                            <Image src={post?.author?.image} alt="avatar" width={64} height={64} className="rounded-full drop-shadow-lg" />
+                            <div>
+                                <p className="text-20-medium">{post?.author?.name}</p>
+                                <p className="text-16-medium !text-black-300">@{post?.author?.username}</p>
+                            </div>
+                        </Link>
+
+                        <p className="category-tag bg-pink-200 ">{post?.category}</p>
+                    </div>
+
+                    <h3 className="text-30-bold mt-10 mb-5">
+                        Pitch Detail
+                    </h3>
+                    {parsedContent ? (
+                        <article className="prose max-w-4xl break-all" dangerouslySetInnerHTML={{ __html: parsedContent }} />
+                    ) : (
+                        <p className="no-result">No Details provided</p>
+                    )}
+                </div>
+                <hr className="my-[70px]" />
+
+                {editorPosts?.length > 0 && (
+                    <div className="max-w-4xl mx-auto">
+                        <p className="text-2xl font-extrabold">Editor Picks</p>
+                        <ul className="mt-7 flex flex-col gap-8">
+                            {editorPosts.map((post: StartupTypeCard, index: number) => (
+                                <StartupCard key={index} post={post}/>
+                            ))}
+                        </ul>
+                    </div>
+                )}
+                <Suspense fallback={"Loading"}>
+                    <View id={id} />
+                </Suspense>
+            </section>
+        </>
+    )
+}
+
+export default page
