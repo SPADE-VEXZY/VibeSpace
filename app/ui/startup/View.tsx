@@ -5,7 +5,7 @@ import { writeClient } from "@/sanity/lib/writeClient"
 
 const View = async ({ id }: { id: string }) => {
 
-    const { views: totalViews } = await client.withConfig({ useCdn: false }).fetch(STARTUP_VIEWS_QUERY, {id})
+    const { views: totalViews } = await client.withConfig({ useCdn: false }).fetch(STARTUP_VIEWS_QUERY, {id}, { cache: 'no-store' })
 
     await writeClient.patch(id).set({views: totalViews + 1}).commit()
 
